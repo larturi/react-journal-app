@@ -5,10 +5,15 @@
     cursor: pointer;
     padding: 14px 10px 14px 10px;
 
+    transition: color .3s ease;
+
     &:focus {
         outline: none;
     }
 
+    &:hover {
+        color: darken($color: white, $amount: 10);
+    }
     
 }
 
