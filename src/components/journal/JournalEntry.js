@@ -1,32 +1,52 @@
 import React from 'react';
+import { useDispatch }  from 'react-redux';
 
-export const JournalEntry = () => {
+import moment from 'moment';
+
+import { activeNote } from '../../actions/notes';
+
+export const JournalEntry = ({ note, id, date, title, body, url}) => {
+
+    const noteDate = moment(date);
+    const fixUrl = url ? url : 'http://www.micreate.eu/wp-content/img/researchers/default.png';
+
+    const dispatch = useDispatch();
+
+    const handleEnterClick = () => {
+        dispatch(activeNote(id, note));
+    }
+
     return (
-        <div className="journal__entry pointer">
+        <div 
+            className="journal__entry pointer"
+            onClick={handleEnterClick}
+        >
 
             <div 
                 className="journal__entry-picture"
                 style={{
                     backgroundSize: 'cover',
-                    backgroundImage: 'url(https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__340.jpg)'
+                    backgroundImage: `url(${fixUrl})`
                 }}
             >
             </div>
 
             <div className="journal__entry-body">
                 <p className="journal__entry-title">
-                    Un nuevo dia
+                    { title }
                 </p>
                 <p className="journal__entry-content">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    { body }
                 </p>
             </div>
 
             <div className="journal__entry-date-box">
-                <span>Lunes</span>
-                <h4>23</h4>
+                <span>{ noteDate.format('dddd') }</span>
+                <h4>{ noteDate.format('Do') }</h4>
             </div>
-            
+
         </div>
+
+        
     )
 }
