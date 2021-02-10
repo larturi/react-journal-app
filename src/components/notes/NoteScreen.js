@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { activeNote } from '../../actions/notes';
+import { activeNote, startDeleting } from '../../actions/notes';
 import { useForm } from '../../hooks/useForm';
 
 import { NotesAppBar } from './NotesAppBar';
@@ -9,11 +9,12 @@ export const NoteScreen = () => {
 
     const { active:note } = useSelector(state => state.notes);
     const [ formValues, handleInputChange, reset ] = useForm(note);
-    const { body, title } = formValues;
+    const { body, title, id } = formValues;
 
     const dispatch = useDispatch();
 
     const activeId = useRef(note.id);
+    const activeUrl = useRef(note.url);
 
     useEffect(() => {
 
@@ -21,12 +22,21 @@ export const NoteScreen = () => {
             reset(note);
             activeId.current = note.id;
         }
+
+        if (note.url !== activeUrl.current) {
+            reset(note);
+            activeUrl.current = note.url;
+        }
         
     }, [note, reset]);
 
     useEffect(() => {
         dispatch(activeNote(formValues.id, { ...formValues }));
     }, [formValues, dispatch]);
+
+    const handleDelete = () => {
+        dispatch(startDeleting( id ));
+    }
 
     return (
         <div className="notes__main-content">
@@ -59,7 +69,7 @@ export const NoteScreen = () => {
                         (note.url) && 
                         <div className="notes__image">
                             <img
-                                src="http://www.imageonemri.ca/image/w2000-c5:2/files/58532088_l.jpg"
+                                src={note.url}
                                 alt="Imagen"
                             />
                         </div>
@@ -68,6 +78,13 @@ export const NoteScreen = () => {
 
 
             </div>
+
+            <button 
+                className="btn btn-danger"
+                onClick={ handleDelete }
+            >
+                Borrar
+            </button>
             
         </div>
     )

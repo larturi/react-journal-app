@@ -1,5 +1,6 @@
 import Swal from 'sweetalert2';
 import { db } from "../firebase/firebase-config";
+import { fileUpload } from '../helpers/fileUpload';
 import { loadNotes } from "../helpers/loadNotes";
 import { types } from "../types/types";
 
@@ -74,4 +75,41 @@ export const refreshNote = (id, note) => ({
     }
 });
 
+export const startUploading = ( file ) => {
+    return async ( dispatch, getState ) => {
 
+        const { active:activeNote } = getState().notes;
+
+        Swal.fire({
+            title: 'Subiendo...',
+            text: 'La imagen se esta subiendo, aguarde por favor...',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            willOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        const fileUrl = await fileUpload(file); 
+        activeNote.url = fileUrl;
+        dispatch(startSaveNote(activeNote));
+
+        Swal.close();
+    }
+};
+
+export const startDeleting = (id) => {
+    return async (dispatch, getState) => {
+
+        const { uid } = getState().auth;
+        await db.doc(`${uid}/journal/notes/${ id }`).delete();
+
+        dispatch(deleteNote(id));
+
+    }
+};
+
+export const deleteNote = (id) => ({
+    type: types.notesDelete,
+    payload: id
+});
