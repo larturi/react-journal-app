@@ -1,14 +1,6 @@
-<h1 align="center">
-  Calendar App Clone
-</h1>
+# Calendar App Clone
 
-<h3 align="center">
-  -- React & Firebase --
-</h3>
-
-<h5 align="center">
-  Made with ❤️ by Leandro Arturi
-</h5>
+### React & Firebase
 
 ## 🚀 Quick start
 
@@ -19,3 +11,6 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 In the project directory, you can run:
 
 `yarn start`
+
+##### Made with ❤️ by Leandro Arturi
+
